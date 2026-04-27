@@ -1,4 +1,3 @@
-require('node:dns').setDefaultResultOrder('ipv4first');
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
@@ -14,6 +13,8 @@ connectDB();
 // Route Registration
 // Note: Ensure src/modules/continuity/routes.js exists!
 app.use('/api/v1/continuity', require('./modules/continuity/routes'));
+app.use('/api/v1/reports', require('./modules/reports/routes'));
+app.use('/api/v1/priority', require('./modules/priority/routes'));
 
 const PORT = process.env.PORT || 3000;
 
