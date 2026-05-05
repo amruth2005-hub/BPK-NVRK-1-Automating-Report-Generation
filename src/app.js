@@ -15,6 +15,7 @@ connectDB();
 app.use('/api/v1/continuity', require('./modules/continuity/routes'));
 app.use('/api/v1/reports', require('./modules/reports/routes'));
 app.use('/api/v1/priority', require('./modules/priority/routes'));
+app.use('/api/v1/audit', require('./modules/audit/routes'));
 
 const PORT = process.env.PORT || 3000;
 

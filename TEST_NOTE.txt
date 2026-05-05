@@ -1,0 +1,84 @@
+=========================================================
+      AUTOMATED REPORT GENERATION - TESTING GUIDE
+=========================================================
+This guide provides PowerShell commands to test all core 
+scenarios of the diagnostic report generation system.
+Data is localized for Indian diagnostic centres.
+
+---------------------------------------------------------
+1. HAPPY PATH: End-to-End Success
+---------------------------------------------------------
+Scenario: A new test arrives, is checkpointed, and a report is generated successfully.
+
+# Step A: Validation/Checkpoint
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/continuity/validation-event" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-001", "patient_name": "Suresh Patel", "results": {"status": "Complete", "HbA1c": "6.2%", "center": "Thyrocare, Pune"}}'
+
+# Step B: Report Generation
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/reports/generate" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-001"}'
+
+
+---------------------------------------------------------
+2. IDEMPOTENCY: Duplicate Checkpoint Protection
+---------------------------------------------------------
+Scenario: The LIS/machine tries to send the validation event twice.
+
+# Step A: Send the initial checkpoint
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/continuity/validation-event" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-002", "patient_name": "Ananya Gupta", "results": {"status": "Complete", "Vitamin_D": "12 ng/mL", "center": "Dr. Lal PathLabs, Noida"}}'
+
+# Step B: Send the exact same checkpoint again 
+# (Expected Error: 409 Conflict - Record already checkpointed)
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/continuity/validation-event" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-002", "patient_name": "Ananya Gupta", "results": {"status": "Complete", "Vitamin_D": "12 ng/mL", "center": "Dr. Lal PathLabs, Noida"}}'
+
+
+---------------------------------------------------------
+3. IDEMPOTENCY: Duplicate Report Generation Protection
+---------------------------------------------------------
+Scenario: A user double-clicks the "Generate" button or a script retries automatically.
+
+# Step A: Setup the checkpoint
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/continuity/validation-event" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-003", "patient_name": "Rajesh Kumar", "results": {"status": "Complete", "TSH": "5.5 mIU/L", "center": "SRL Diagnostics, Mumbai"}}'
+
+# Step B: Generate the report for the first time
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/reports/generate" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-003"}'
+
+# Step C: Attempt to generate it again 
+# (Expected Error: 409 Conflict - Report already generated)
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/reports/generate" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-003"}'
+
+
+---------------------------------------------------------
+4. STATE VALIDATION: Premature Report Generation
+---------------------------------------------------------
+Scenario: Trying to generate a report for a test that hasn't been checkpointed yet.
+
+# Step A: Attempt to generate report without checkpointing 
+# (Expected Error: 404 Not Found - Record not found)
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/reports/generate" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-004"}'
+
+
+---------------------------------------------------------
+5. MISSING DATA HANDLING: Payload Validation
+---------------------------------------------------------
+Scenario: Sending an incomplete payload to the API (missing required Mongoose fields).
+
+# Step A: Missing Patient Name 
+# (Expected Error: 500 Internal Server Error due to missing required field)
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/continuity/validation-event" `
+-Headers @{"Content-Type"="application/json"} `
+-Body '{"test_id": "ORD-TC-005", "results": {"status": "Complete", "center": "Metropolis Healthcare, Chennai"}}'
