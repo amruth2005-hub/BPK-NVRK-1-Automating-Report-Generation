@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Tech Portal | Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body>
+    <div class="bg-gradient"></div>
+    <div class="bg-mesh"></div>
+
+    <div class="login-wrapper">
+        <div class="glass-panel login-card" id="loginBox">
+            <div class="login-header">
+                <div class="logo-icon" style="margin: 0 auto 16px auto; width: max-content;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </div>
+                <h1 style="font-size: 24px; margin-bottom: 8px;">Technician Portal</h1>
+                <p style="color: var(--text-muted); font-size: 14px;">Authenticate to access the Continuity Engine</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-wrapper">
+                    <input type="text" id="tech_id" placeholder="Tech ID (e.g., TECH-001)" required autocomplete="off">
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Password (use: admin123)" required>
+                </div>
+                <button type="submit" class="btn btn-primary gs-btn" id="loginBtn" style="margin-top: 10px;">
+                    Secure Login
+                </button>
+            </form>
+            <div id="loginError" class="error-msg"
+                style="color: #ef4444; font-size: 13px; text-align: center; margin-top: 12px; min-height: 18px; font-weight: 600;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GSAP Entrance Animation
+        gsap.from("#loginBox", {
+            y: 40,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            clearProps: "all"
+        });
+
+        // Mock Authentication Logic
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('tech_id').value;
+            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+
+            if (pass === 'admin123') {
+                errorDiv.innerText = "";
+                // Success Animation
+                gsap.to(btn, {
+                    background: "linear-gradient(135deg, var(--accent-emerald), var(--accent-emerald-hover))",
+                    boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+                    innerText: "Authenticated ✓",
+                    duration: 0.3
+                });
+
+                // Save mock token and redirect
+                setTimeout(() => {
+                    localStorage.setItem('lab_token', 'SECURE-TECH-TOKEN');
+                    localStorage.setItem('tech_id', id);
+                    window.location.href = 'index.html';
+                }, 800);
+            } else {
+                // Shake Animation for Error
+                errorDiv.innerText = "Invalid Credentials";
+                gsap.fromTo("#loginBox",
+                    { x: -8 },
+                    { x: 8, duration: 0.1, yoyo: true, repeat: 3, clearProps: "x" }
+                );
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -10,6 +10,10 @@ app.use(express.json());
 // Initialize Database
 connectDB();
 
+// Serve Frontend Static Files
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend'))); // <-- UPDATE THIS LINE
+
 // Route Registration
 // Note: Ensure src/modules/continuity/routes.js exists!
 app.use('/api/v1/continuity', require('./modules/continuity/routes'));

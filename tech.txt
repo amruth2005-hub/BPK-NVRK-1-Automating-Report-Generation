@@ -1,0 +1,46 @@
+Think of these as the different parts of a modern "machine" for building websites. They all use JavaScript, but they do very different jobs. [1, 2]  
+1. Node.js (The Engine) 
+Node.js 
+ is the runtime environment. Traditionally, JavaScript only ran inside web browsers. Node.js lets you run JavaScript on your computer or a server, away from the browser. 
+
+• Role: It’s the "engine" that powers everything on the server side. 
+• Key Feature: It’s fast and handles many connections at once using a "non-blocking" model. [5, 6, 7]  
+
+2. Express (The Toolkit) 
+Express.js is a framework built specifically to run on top of Node.js. If Node.js is the engine, Express is the dashboard and steering wheel that makes the engine easy to use for building websites. 
+
+• Role: It handles the backend (server-side) logic, like managing web addresses (routing), handling user logins, and talking to databases. 
+• Key Feature: It simplifies complex server code into a few lines. [7, 10, 11, 12]  
+
+3. React (The Painter) 
+React is a library for building frontends (the part you see and click on). 
+
+• Role: It lives in the user's browser and manages the "User Interface" (UI). It’s great for creating interactive elements like buttons, search bars, and live updates. 
+• Key Feature: It uses "components" (reusable pieces of code) and a "Virtual DOM" to update the screen quickly without reloading the whole page. [1, 3, 12, 13]  
+
+How they work together 
+These three are often used together in a popular setup called the MERN Stack (MongoDB, Express, React, Node): 
+
+1. User clicks a button in the React frontend. 
+2. React sends a request over the internet to the Express server. 
+3. Express (running on Node.js) receives the request, maybe looks up some data in a database, and sends a response back. 
+4. React gets that data and instantly updates what you see on the screen. [7, 11, 12, 13, 15]  
+
+AI responses may include mistakes.
+
+[1] https://www.geeksforgeeks.org/node-js/difference-between-node-js-and-react-js/
+[2] https://www.placementpreparation.io/blog/best-websites-to-learn-node-js/
+[3] https://www.quora.com/What-is-the-difference-between-Express-and-React-in-terms-of-node-js-development
+[4] https://www.geeksforgeeks.org/node-js/node-js-vs-express-js/
+[5] https://www.youtube.com/watch?v=vJQ91CGfAgM
+[6] https://medium.com/@etherealm/node-and-react-a-brief-introduction-99b672262fed
+[7] https://www.codecademy.com/article/what-is-express-js
+[8] https://lemon.io/answers/express-js/what-is-react-express-js-vs-node-js/
+[9] https://www.w3schools.com/nodejs/nodejs_express.asp
+[10] https://www.youtube.com/watch?v=VFQ1rskbUbE
+[11] https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/Introduction
+[12] https://www.codeable.io/blog/express-js-vs-react/
+[13] https://www.simform.com/blog/express-vs-react/
+[14] https://www.youtube.com/watch?v=Jcs_2jNPgtE
+[15] https://medium.com/@maison.moa/setting-up-an-express-backend-server-for-create-react-app-bc7620b20a61
+
