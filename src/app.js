@@ -16,7 +16,6 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 connectDB();
 startArchiver();
 
-// Global Socket accessible to our routes
 app.set('socketio', io);
 
 io.on('connection', (socket) => {
@@ -31,16 +30,14 @@ app.use('/api/v1/priority', require('./modules/priority/routes'));
 app.use('/api/v1/audit', require('./modules/audit/routes'));
 
 // ==========================================
-// 🛡️ BULLETPROOF UI FALLBACK ROUTE
+// 🛡️ BULLETPROOF UI FALLBACK ROUTE (EXPRESS 5)
 // ==========================================
-// This tells Render: "If someone visits the website, give them the login page!"
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
 
 const PORT = process.env.PORT || 3000;
 
-// IMPORTANT: Change app.listen to server.listen
 server.listen(PORT, () => {
     console.log(`🚀 Senior Architect: System live on port ${PORT}`);
     console.log(`📡 Telemetry Socket initialized.`);
