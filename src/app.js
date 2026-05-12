@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const startArchiver = require('./utils/archiver'); // Add this!
 const path = require('path');
 const http = require('http'); // Add HTTP module
 const { Server } = require('socket.io'); // Add Socket.io
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 connectDB();
+startArchiver();
 
 // Global Socket accessible to our routes
 app.set('socketio', io);

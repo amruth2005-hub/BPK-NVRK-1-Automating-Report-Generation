@@ -27,12 +27,17 @@ exports.viewReport = async (req, res) => {
             await order.save();
         }
 
-        // 4. Secure Audit Logging (HIPAA style)
+        // 4. Secure Audit Logging (HIPAA style with Network Tracing)
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const clientAgent = req.headers['user-agent'];
+
         await new AuditLog({
             test_id: order.test_id,
             action: `REPORT_VIEWED_BY_${user.id}`,
             previous_state: previousState,
-            current_state: order.status
+            current_state: order.status,
+            ip_address: clientIp,       // Captures the Doctor's IP
+            user_agent: clientAgent     // Captures the Doctor's Browser/Device
         }).save();
 
         // 5. Deliver the Data
