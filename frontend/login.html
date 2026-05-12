@@ -27,8 +27,8 @@
                         <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                     </svg>
                 </div>
-                <h1 style="font-size: 24px; margin-bottom: 8px;">Technician Portal</h1>
-                <p style="color: var(--text-muted); font-size: 14px;">Authenticate to access the Continuity Engine</p>
+                <h1 style="font-size: 24px; margin-bottom: 8px;">BPARGS Secure Portal</h1>
+                <p style="color: var(--text-muted); font-size: 14px;">Authorized Medical & Lab Personnel Only</p>
             </div>
 
             <form id="loginForm">
@@ -59,36 +59,51 @@
         });
 
         // Mock Authentication Logic
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        // Real Backend Authentication Logic
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('tech_id').value;
             const pass = document.getElementById('password').value;
             const btn = document.getElementById('loginBtn');
             const errorDiv = document.getElementById('loginError');
 
-            if (pass === 'admin123') {
-                errorDiv.innerText = "";
-                // Success Animation
-                gsap.to(btn, {
-                    background: "linear-gradient(135deg, var(--accent-emerald), var(--accent-emerald-hover))",
-                    boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
-                    innerText: "Authenticated ✓",
-                    duration: 0.3
+            try {
+                // Call our real Node.js Auth Endpoint
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: id, password: pass })
                 });
 
-                // Save mock token and redirect
-                setTimeout(() => {
-                    localStorage.setItem('lab_token', 'SECURE-TECH-TOKEN');
-                    localStorage.setItem('tech_id', id);
-                    window.location.href = 'index.html';
-                }, 800);
-            } else {
-                // Shake Animation for Error
-                errorDiv.innerText = "Invalid Credentials";
-                gsap.fromTo("#loginBox",
-                    { x: -8 },
-                    { x: 8, duration: 0.1, yoyo: true, repeat: 3, clearProps: "x" }
-                );
+                const data = await response.json();
+
+                if (response.ok) {
+                    errorDiv.innerText = "";
+                    gsap.to(btn, { 
+                        background: "linear-gradient(135deg, var(--accent-emerald), var(--accent-emerald-hover))", 
+                        boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+                        innerText: `Welcome, ${data.user.name} ✓`, 
+                        duration: 0.3 
+                    });
+                    
+                    // Save Token, ID, AND ROLE for the unified dashboard
+                    setTimeout(() => {
+                        localStorage.setItem('lab_token', data.token);
+                        localStorage.setItem('user_id', id);
+                        localStorage.setItem('user_role', data.user.role); // Save the role!
+                        window.location.href = 'index.html';
+                    }, 1000);
+                }
+ else {
+                    // Shake Animation for Error
+                    errorDiv.innerText = data.error || "Invalid Credentials";
+                    gsap.fromTo("#loginBox",
+                        { x: -8 },
+                        { x: 8, duration: 0.1, yoyo: true, repeat: 3, clearProps: "x" }
+                    );
+                }
+            } catch (err) {
+                errorDiv.innerText = "Network Error: Cannot reach Auth Server";
             }
         });
     </script>

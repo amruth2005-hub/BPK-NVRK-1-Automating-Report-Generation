@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Abstract Background -->
     <div class="bg-gradient"></div>
@@ -19,7 +23,8 @@
         <header class="gsap-header glass-panel">
             <div class="header-content">
                 <div class="logo-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                     </svg>
                 </div>
@@ -31,54 +36,55 @@
             <div class="header-status">
                 <div class="pulse-dot"></div>
                 <span>SYSTEM ONLINE</span>
+                <button id="btn-logout" style="margin-left: 16px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; transition: 0.2s;">
+                    LOGOUT
+                </button>
             </div>
         </header>
 
         <div class="dashboard">
             <!-- Left Column: Controls -->
             <div class="panel glass-panel controls gsap-panel-left">
-                <div class="section-block">
-                    <h2>
-                        <span class="step-num">1</span> 
-                        New Lab Entry <span class="badge">Sprint 1</span>
-                    </h2>
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <input type="text" id="test_id" placeholder="Test ID (e.g., ORD-900)" required autocomplete="off">
+                
+                <div id="tech-view" style="display: none;">
+                    <div class="section-block">
+                        <h2><span class="step-num">1</span> New Lab Entry <span class="badge">Sprint 1</span></h2>
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <input type="text" id="test_id" placeholder="Test ID (e.g., ORD-900)" autocomplete="off">
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" id="patient_name" placeholder="Patient Name" autocomplete="off">
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="number" id="glucose" placeholder="Glucose Level (mg/dL)" autocomplete="off">
+                            </div>
+                            <button id="btn-checkpoint" class="btn btn-primary gs-btn">
+                                Vault & Checkpoint
+                            </button>
                         </div>
-                        <div class="input-wrapper">
-                            <input type="text" id="patient_name" placeholder="Patient Name" required autocomplete="off">
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="number" id="glucose" placeholder="Glucose Level (mg/dL)" required autocomplete="off">
-                        </div>
-                        <button id="btn-checkpoint" class="btn btn-primary gs-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            Vault & Checkpoint
-                        </button>
+                    </div>
+                    <div class="section-block mt-4">
+                        <h2><span class="step-num">2-3</span> Pipeline Execution <span class="badge">Automated</span></h2>
+                        <p style="font-size: 13px; color: var(--text-muted);">Sprints 2 and 3 are handled by the Auto-Pilot.</p>
                     </div>
                 </div>
 
-                <div class="section-block mt-4">
-                    <h2>
-                        <span class="step-num">2-4</span> 
-                        Pipeline Execution <span class="badge">Sprints 2-4</span>
-                    </h2>
-                    <div class="action-group">
-                        <button id="btn-generate" class="btn btn-action gs-btn" disabled>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                            Generate Report
-                        </button>
-                        <button id="btn-route" class="btn btn-action gs-btn" disabled>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                            Triage & Route
-                        </button>
-                        <button id="btn-access" class="btn btn-secure gs-btn" disabled>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Doctor Login & View
-                        </button>
+                <div id="doctor-view" style="display: none;">
+                    <div class="section-block">
+                        <h2><span class="step-num">4</span> Secure Report Access <span class="badge">Sprint 4</span></h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Enter a Test ID to securely retrieve the generated medical report from the vault.</p>
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <input type="text" id="doc_search_id" placeholder="Enter Test ID (e.g., ORD-678)" autocomplete="off">
+                            </div>
+                            <button id="btn-access" class="btn btn-secure gs-btn">
+                                Doctor Login & View
+                            </button>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Right Column: System Terminal -->
@@ -104,7 +110,10 @@
     </div>
 
     <!-- GSAP Libraries -->
+    <div id="toast-container" class="toast-container"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="main.js"></script>
 </body>
+
 </html>

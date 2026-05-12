@@ -1,14 +1,24 @@
-module.exports = (req, res, next) => {
-    // Look for the Authorization header
-    const token = req.headers['authorization'];
+const jwt = require('jsonwebtoken');
 
-    // For this MVP, we are using a hardcoded master token
-    if (token === 'Bearer ARCHITECT-SECURE-TOKEN') {
-        // Token is valid! Tag the request with the Doctor's identity
-        req.user = { role: 'Physician', id: 'DOC-101' };
-        next(); // Let them through
-    } else {
-        // Intruder alert!
-        res.status(401).json({ error: "Unauthorized. Valid medical token required." });
+module.exports = (req, res, next) => {
+    // 1. Look for the Authorization header
+    const authHeader = req.headers['authorization'];
+
+    // 2. Extract the token (Format is usually "Bearer eyJhbGci...")
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Access Denied. No token provided." });
+    }
+
+    // 3. Verify the token using our secret key
+    try {
+        const verifiedData = jwt.verify(token, process.env.JWT_SECRET);
+
+        // 4. Attach the verified user data to the request so controllers can use it
+        req.user = verifiedData;
+        next(); // Let them through!
+    } catch (err) {
+        res.status(403).json({ error: "Invalid or expired token." });
     }
 };

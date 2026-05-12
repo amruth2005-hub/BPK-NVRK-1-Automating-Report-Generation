@@ -426,3 +426,53 @@ input:focus {
 .login-header {
     margin-bottom: 32px;
 }
+
+/* -----------------------------------------------------
+   TOAST NOTIFICATIONS
+----------------------------------------------------- */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999;
+    pointer-events: none;
+    /* Lets you click through the invisible container */
+}
+
+.toast {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--accent-cyan);
+    color: var(--text-main);
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    min-width: 280px;
+    font-family: var(--font-sans);
+}
+
+.toast-error {
+    border-left-color: #ef4444;
+}
+
+.toast-success {
+    border-left-color: #10b981;
+}
+
+.toast strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.toast p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
